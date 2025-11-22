@@ -13,7 +13,7 @@ export function PackageCard({ package: pkg }: PackageCardProps) {
     <Card className="overflow-hidden hover:shadow-xl transition-all group">
       <div className="relative h-56 overflow-hidden">
         <img
-          src={`/ceholder-svg-height-300-width-400-.jpg?height=300&width=400&${pkg.image}`}
+          src={pkg.image}
           alt={pkg.title}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
@@ -75,10 +75,10 @@ export function PackageCard({ package: pkg }: PackageCardProps) {
         <div className="flex items-end justify-between pt-4 border-t">
           <div>
             {pkg.originalPrice && (
-              <p className="text-sm text-muted-foreground line-through">₹{pkg.originalPrice.toLocaleString()}</p>
+              <p className="text-sm text-muted-foreground line-through">BDT{pkg.originalPrice.toLocaleString()}</p>
             )}
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-primary">₹{pkg.price.toLocaleString()}</span>
+              <span className="text-2xl font-bold text-primary">BDT{pkg.price.toLocaleString()}</span>
               <span className="text-xs text-muted-foreground">per person</span>
             </div>
           </div>

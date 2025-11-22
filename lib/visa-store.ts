@@ -21,7 +21,7 @@ const mockVisaServices: VisaService[] = [
     price: 18000,
     validity: "10 Years",
     requirements: ["Valid Passport", "Photographs", "Bank Statements", "Travel Itinerary"],
-    image: "query=usa statue of liberty",
+    image: "/images/tour1.jpg",
     popular: true,
   },
   {
@@ -32,7 +32,7 @@ const mockVisaServices: VisaService[] = [
     price: 15000,
     validity: "6 Months",
     requirements: ["Valid Passport", "Photographs", "Financial Proof", "Accommodation Details"],
-    image: "query=london big ben",
+    image: "/images/tour2.jpg",
     popular: true,
   },
   {
@@ -43,7 +43,7 @@ const mockVisaServices: VisaService[] = [
     price: 12000,
     validity: "90 Days",
     requirements: ["Valid Passport", "Travel Insurance", "Hotel Bookings", "Flight Tickets"],
-    image: "query=eiffel tower paris",
+    image: "/images/tour3.jpg",
     popular: true,
   },
   {
@@ -54,7 +54,7 @@ const mockVisaServices: VisaService[] = [
     price: 8000,
     validity: "30 Days",
     requirements: ["Valid Passport", "Photographs", "Return Tickets"],
-    image: "query=dubai burj khalifa",
+    image: "/images/tour4.jpg",
     popular: true,
   },
   {
@@ -65,7 +65,7 @@ const mockVisaServices: VisaService[] = [
     price: 6500,
     validity: "30 Days",
     requirements: ["Valid Passport", "Photographs", "Financial Proof", "Travel Plan"],
-    image: "query=singapore marina bay",
+    image: "/images/tour5.jpg",
   },
   {
     id: "6",
@@ -75,7 +75,7 @@ const mockVisaServices: VisaService[] = [
     price: 16000,
     validity: "12 Months",
     requirements: ["Valid Passport", "Health Insurance", "Financial Documents", "Purpose of Visit"],
-    image: "query=sydney opera house",
+    image: "/images/tour6.jpg",
   },
 ]
 

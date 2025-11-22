@@ -141,8 +141,9 @@ export function BookingsTable() {
                       year: "numeric",
                     })}
                   </TableCell>
-                  <TableCell className="font-semibold">₹{booking.amount.toLocaleString()}</TableCell>
-                  <TableCell className="font-semibold text-green-600">₹{booking.commission.toLocaleString()}</TableCell>
+                  <TableCell className="font-semibold">
+                    DT{booking.amount.toLocaleString()}</TableCell>
+                  <TableCell className="font-semibold text-green-600">BDT{booking.commission.toLocaleString()}</TableCell>
                   <TableCell>
                     <Badge variant="outline" className={getStatusColor(booking.status)}>
                       {booking.status}

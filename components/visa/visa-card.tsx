@@ -13,7 +13,7 @@ export function VisaCard({ service }: VisaCardProps) {
     <Card className="overflow-hidden hover:shadow-xl transition-all group">
       <div className="relative h-48 overflow-hidden">
         <img
-          src={`/ceholder-svg-height-250-width-400-.jpg?height=250&width=400&${service.image}`}
+          src={service.image}
           alt={service.country}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
@@ -66,7 +66,7 @@ export function VisaCard({ service }: VisaCardProps) {
         <div className="flex items-end justify-between pt-4 border-t">
           <div>
             <p className="text-xs text-muted-foreground mb-1">Starting from</p>
-            <span className="text-2xl font-bold text-primary">₹{service.price.toLocaleString()}</span>
+            <span className="text-2xl font-bold text-primary">BDT{service.price.toLocaleString()}</span>
           </div>
           <Button className="bg-gradient-to-r from-primary to-accent">Apply Now</Button>
         </div>

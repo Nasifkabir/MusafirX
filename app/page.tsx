@@ -43,7 +43,7 @@ export default function HomePage() {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h3 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Why Choose SkyBook?</h3>
+            <h3 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Why Choose MusafirX?</h3>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               We provide the best flight booking experience with competitive prices and excellent service
             </p>
@@ -106,17 +106,17 @@ export default function HomePage() {
               {
                 city: "Dubai",
                 country: "UAE",
-                image: "query=goa-beach-sunset",
+                image: "/images/dubai.jpg",
               },
               {
                 city: "Singapore",
                 country: "Singapore",
-                image: "query=singapore marina bay",
+                image: "/images/singapore.jpg",
               },
               {
                 city: "Bangkok",
                 country: "Thailand",
-                image: "query=bangkok temple",
+                image: "images/bangkok.jpg",
               },
             ].map((destination) => (
               <Card
@@ -125,7 +125,7 @@ export default function HomePage() {
               >
                 <div className="relative h-64 overflow-hidden">
                   <img
-                    src={`/ceholder-svg-height-300-width-500-.jpg?height=300&width=500&${destination.image}`}
+                    src={destination.image}
                     alt={destination.city}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
@@ -135,7 +135,7 @@ export default function HomePage() {
                     <p className="text-lg">{destination.country}</p>
                   </div>
                 </div>
-              </Card>
+              </Card> 
             ))}
           </div>
         </div>

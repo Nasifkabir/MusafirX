@@ -32,7 +32,7 @@ export default function AgentDashboardPage() {
           />
           <StatsCard
             title="Total Revenue"
-            value={`₹${(stats.totalRevenue / 1000).toFixed(1)}K`}
+            value={`BDT${(stats.totalRevenue / 1000).toFixed(1)}K`}
             icon={DollarSign}
             trend="8% from last month"
             trendUp={true}
@@ -40,7 +40,7 @@ export default function AgentDashboardPage() {
           />
           <StatsCard
             title="Total Commission"
-            value={`₹${(stats.totalCommission / 1000).toFixed(1)}K`}
+            value={`BDT${(stats.totalCommission / 1000).toFixed(1)}K`}
             icon={TrendingUp}
             trend="15% from last month"
             trendUp={true}

@@ -33,7 +33,7 @@ export function CommissionChart() {
           <div key={data.month} className="space-y-2">
             <div className="flex items-center justify-between text-sm">
               <span className="font-medium text-foreground">{data.month}</span>
-              <span className="font-semibold text-foreground">₹{data.commission.toLocaleString()}</span>
+              <span className="font-semibold text-foreground">BDT{data.commission.toLocaleString()}</span>
             </div>
             <div className="h-3 bg-muted rounded-full overflow-hidden">
               <div

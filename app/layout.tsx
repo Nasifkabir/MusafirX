@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "SkyBook - Your Travel Partner",
+  title: "MusafirX - Flight Booking Made Easy",
   description: "Book flights, hotels, holidays, and visa services with ease",
     generator: 'v0.app'
 }
