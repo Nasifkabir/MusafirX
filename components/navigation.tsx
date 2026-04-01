@@ -16,7 +16,7 @@ export function Navigation() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
             <div className="h-10 w-10 bg-primary rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
-              <Plane className="h-6 w-6 text-white" />
+              <Plane className="h-6 w-6 text-blue" />
             </div>
             <div>
               <h1 className="text-xl font-bold text-foreground">MusafirWay</h1>
