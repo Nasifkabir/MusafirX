@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print a message
-        run: echo "Action Workflow Running Perfectly!"
+        run: echo "Yaaa ! Action Workflow Running Perfectly!"
 
       - name: Show current date and time
         run: date
