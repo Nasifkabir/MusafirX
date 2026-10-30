@@ -1,119 +1,122 @@
+"use client"
+
 import Link from "next/link"
-import { Plane, Facebook, Twitter, Instagram, Linkedin } from "lucide-react"
+import { usePathname } from "next/navigation"
+import { Plane, Facebook, Twitter, Instagram, Linkedin, ShieldCheck, Award, Headphones, CreditCard } from "lucide-react"
 
 export function SiteFooter() {
+  const pathname = usePathname()
+
+  if (pathname.startsWith("/admin")) {
+    return null
+  }
+
   return (
-    <footer className="bg-card border-t mt-auto">
-      <div className="container mx-auto px-4 py-12">
+    <footer className="bg-neutral-950 text-neutral-300 border-t border-neutral-800 mt-auto">
+      <div className="container mx-auto px-4 py-14">
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
-          <div>
-            <Link href="/" className="flex items-center gap-2 font-bold text-xl text-foreground mb-4">
-              <div className="h-8 w-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
-                <Plane className="h-5 w-5 text-white" />
+          <div className="space-y-4">
+            <Link href="/" className="flex items-center gap-2.5 font-bold text-xl text-white">
+              <div className="h-9 w-9 bg-gradient-to-br from-primary to-blue-600 rounded-xl flex items-center justify-center text-white shadow-md shadow-primary/25">
+                <Plane className="h-5 w-5 fill-current transform -rotate-45" />
               </div>
-              <span>MusafirX</span>
+              <span className="text-xl font-black tracking-tight">
+                Musafir<span className="text-primary">X</span>
+              </span>
             </Link>
-            <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-              Your trusted travel partner for flights, hotels, holidays, and visa services.
+            <p className="text-xs text-neutral-400 leading-relaxed">
+              Next-generation online travel agency powered by Sabre GDS. Real-time airfare shopping, instant PNR issuance, and 24/7 concierge ticketing.
             </p>
-            <div className="flex items-center gap-3">
-              <Link
-                href="#"
-                className="h-9 w-9 rounded-lg bg-muted hover:bg-primary hover:text-white transition-colors flex items-center justify-center"
-              >
-                <Facebook className="h-4 w-4" />
-              </Link>
-              <Link
-                href="#"
-                className="h-9 w-9 rounded-lg bg-muted hover:bg-primary hover:text-white transition-colors flex items-center justify-center"
-              >
-                <Twitter className="h-4 w-4" />
-              </Link>
-              <Link
-                href="#"
-                className="h-9 w-9 rounded-lg bg-muted hover:bg-primary hover:text-white transition-colors flex items-center justify-center"
-              >
-                <Instagram className="h-4 w-4" />
-              </Link>
-              <Link
-                href="#"
-                className="h-9 w-9 rounded-lg bg-muted hover:bg-primary hover:text-white transition-colors flex items-center justify-center"
-              >
-                <Linkedin className="h-4 w-4" />
-              </Link>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 bg-neutral-900 px-2.5 py-1 rounded-md border border-neutral-800">
+                Sabre GDS Certified
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 bg-neutral-900 px-2.5 py-1 rounded-md border border-neutral-800">
+                B2B Sub-Agent Hub
+              </span>
             </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-bold text-foreground mb-4">Quick Links</h3>
-            <ul className="space-y-2">
+            <h3 className="font-bold text-white text-sm uppercase tracking-wider mb-4">Aviation & Travel</h3>
+            <ul className="space-y-2 text-xs">
               <li>
-                <Link href="/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Flights
+                <Link href="/flight/search" className="text-neutral-400 hover:text-white transition-colors">
+                  Flight Shopping Radar
                 </Link>
               </li>
               <li>
-                <Link href="/hotels" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Hotels
+                <Link href="/hotels" className="text-neutral-400 hover:text-white transition-colors">
+                  Luxury Hotels & Resorts
                 </Link>
               </li>
               <li>
-                <Link href="/holidays" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Holidays
+                <Link href="/holidays" className="text-neutral-400 hover:text-white transition-colors">
+                  Holiday Packages
                 </Link>
               </li>
               <li>
-                <Link href="/visa" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Visa Services
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Support */}
-          <div>
-            <h3 className="font-bold text-foreground mb-4">Support</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Help Center
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Contact Us
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  FAQs
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Terms & Conditions
+                <Link href="/visa" className="text-neutral-400 hover:text-white transition-colors">
+                  Global Visa Consultation
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Admin & B2B Portal */}
+          {/* Payment & Security */}
           <div>
-            <h3 className="font-bold text-foreground mb-4">Contact</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>Email: support@MusafirX.com</li>
-              <li>Phone: +8801901402XXX</li>
-              <li>Address: Dhaka, Bangladesh</li>
+            <h3 className="font-bold text-white text-sm uppercase tracking-wider mb-4">Payment & Security</h3>
+            <ul className="space-y-2 text-xs text-neutral-400">
+              <li className="flex items-center gap-2">
+                <ShieldCheck className="size-3.5 text-emerald-400 shrink-0" />
+                <span>SSLCommerz 256-Bit Encrypted</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <CreditCard className="size-3.5 text-sky-400 shrink-0" />
+                <span>Visa, Mastercard & Amex</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="size-2 rounded-full bg-pink-500 shrink-0" />
+                <span>bKash & Nagad Instant MFS</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <Plane className="size-3.5 text-amber-400 shrink-0" />
+                <span>Sabre Certified GDS Ticketing</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Contact & Support */}
+          <div>
+            <h3 className="font-bold text-white text-sm uppercase tracking-wider mb-4">24/7 Ticketing Desk</h3>
+            <ul className="space-y-2.5 text-xs text-neutral-400">
+              <li className="flex items-center gap-2 text-white font-bold">
+                <Headphones className="size-4 text-primary" />
+                <span>+880 9610-002244</span>
+              </li>
+              <li>Email: support@musafirx.com</li>
+              <li>GDS Desk: sabre-desk@musafirx.com</li>
+              <li>HQ: Gulshan-2, Dhaka 1212, Bangladesh</li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t mt-8 pt-8 text-center text-sm text-muted-foreground">
-          <p>&copy; 2025 MusafirX. All rights reserved.</p>
+        <div className="border-t border-neutral-900 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-neutral-500 gap-4">
+          <p>&copy; {new Date().getFullYear()} MusafirX Global Travel Limited. All rights reserved.</p>
+          <div className="flex items-center gap-4 text-xs">
+            <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <span>•</span>
+            <Link href="#" className="hover:text-white transition-colors">Terms of Service</Link>
+            <span>•</span>
+            <Link href="#" className="hover:text-white transition-colors">GDS Rules</Link>
+          </div>
         </div>
       </div>
     </footer>
   )
 }
+

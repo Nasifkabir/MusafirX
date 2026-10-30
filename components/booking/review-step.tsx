@@ -71,7 +71,7 @@ export function ReviewStep() {
                 })}
               </p>
               <p className="text-xs text-muted-foreground mt-1">
-                {selectedFlight.departure} - {selectedFlight.arrival}
+                {selectedFlight.departureTime} - {selectedFlight.arrivalTime}
               </p>
             </div>
           </div>
@@ -96,7 +96,7 @@ export function ReviewStep() {
           <div className="flex items-center justify-between mb-4">
             <span className="text-muted-foreground">Base Fare ({totalPassengers} passenger(s))</span>
             <span className="font-semibold text-foreground">
-              ₹{(selectedFlight.price * totalPassengers).toLocaleString()}
+              ৳ {(selectedFlight.price * totalPassengers).toLocaleString()}
             </span>
           </div>
           <div className="flex items-center justify-between mb-4">

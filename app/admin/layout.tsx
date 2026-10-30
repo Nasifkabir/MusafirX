@@ -1,15 +1,16 @@
 import type React from "react"
-import { AdminSidebar } from "@/components/admin/admin-sidebar"
-import { AdminHeader } from "@/components/admin/admin-header"
+import { cookies } from "next/headers"
+import { validateSession } from "@/lib/db"
+import { AdminAuthGuard } from "@/components/admin/admin-auth-guard"
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const cookieStore = await cookies()
+  const token = cookieStore.get("mx_admin_session")?.value
+  const session = token ? validateSession(token) : null
+
   return (
-    <div className="flex min-h-screen bg-background">
-      <AdminSidebar />
-      <div className="flex-1 flex flex-col">
-        <AdminHeader />
-        <main className="flex-1">{children}</main>
-      </div>
-    </div>
+    <AdminAuthGuard initialAuthenticated={Boolean(session)}>
+      {children}
+    </AdminAuthGuard>
   )
 }

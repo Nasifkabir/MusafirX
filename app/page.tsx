@@ -1,141 +1,414 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { FlightSearchForm } from "@/components/flight-search-form"
 import { RecentSearches } from "@/components/recent-searches"
-import { Plane, Shield, Clock, Award } from "lucide-react"
-import { Card } from "@/components/ui/card"
+import {
+  Plane,
+  ShieldCheck,
+  Clock,
+  Award,
+  ArrowRight,
+  Sparkles,
+  CreditCard,
+  Building2,
+  CalendarClock,
+  Wallet,
+  Headphones,
+  CheckCircle,
+} from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 export default function HomePage() {
+  const router = useRouter()
+  const [activeSlide, setActiveSlide] = useState(0)
+  const [sabreStatus, setSabreStatus] = useState<{
+    status: string
+    pcc: string
+    environment: string
+  }>({
+    status: "untested",
+    pcc: "IPCC",
+    environment: "sandbox",
+  })
+
+  // Hero destination carousel for popular GDS routes
+  const destinations = [
+    {
+      code: "CXB",
+      city: "Cox's Bazar",
+      country: "Bangladesh",
+      tagline: "World's Longest Natural Sea Beach",
+      startingFare: "৳ 4,578",
+      image: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1600&q=80",
+    },
+    {
+      code: "DXB",
+      city: "Dubai",
+      country: "United Arab Emirates",
+      tagline: "Futuristic Skyline & Luxury Oasis",
+      startingFare: "৳ 36,800",
+      image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1600&q=80",
+    },
+    {
+      code: "BKK",
+      city: "Bangkok",
+      country: "Thailand",
+      tagline: "Vibrant Street Life & Grand Palaces",
+      startingFare: "৳ 28,500",
+      image: "https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=1600&q=80",
+    },
+    {
+      code: "SIN",
+      city: "Singapore",
+      country: "Singapore",
+      tagline: "Garden City & World-Class Hub",
+      startingFare: "৳ 34,200",
+      image: "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=1600&q=80",
+    },
+    {
+      code: "MLE",
+      city: "Malé",
+      country: "Maldives",
+      tagline: "Turquoise Waters & Island Bliss",
+      startingFare: "৳ 46,000",
+      image: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1600&q=80",
+    },
+  ]
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % destinations.length)
+    }, 6000)
+    return () => clearInterval(timer)
+  }, [destinations.length])
+
+  // Fetch Sabre status
+  useEffect(() => {
+    async function checkSabre() {
+      try {
+        const res = await fetch("/api/sabre/config")
+        const data = await res.json()
+        if (data.success && data.credentials) {
+          setSabreStatus({
+            status: data.credentials.status,
+            pcc: data.credentials.pcc,
+            environment: data.credentials.environment,
+          })
+        }
+      } catch (e) {
+        console.error("Sabre status check error:", e)
+      }
+    }
+    checkSabre()
+  }, [])
+
+  const currentDest = destinations[activeSlide]
+
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary via-primary/95 to-secondary py-20 md:py-32 overflow-hidden">
-        {/* Decorative background pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-white rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent rounded-full blur-3xl" />
+    <div className="min-h-screen bg-white">
+      {/* Consumer Announcement Strip */}
+      <div className="bg-neutral-950 text-white text-xs py-2 px-3 sm:px-4 border-b border-neutral-800/80 overflow-hidden">
+        <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-1.5 sm:gap-2">
+          <div className="flex items-center gap-2 max-w-full truncate text-[11px] sm:text-xs">
+            <span className="size-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+            <span className="font-semibold text-neutral-300 shrink-0">
+              Live Airfare Engine:
+            </span>
+            <span className="text-neutral-400 truncate">
+              Direct Sabre GDS Inventory · Official BDT Fares
+            </span>
+          </div>
+
+          <div className="hidden sm:flex items-center gap-4 text-xs shrink-0">
+            <span className="text-neutral-400">24/7 Helpline: <strong className="text-white">+880 9610-002244</strong></span>
+            <span className="text-neutral-700">|</span>
+            <span className="text-emerald-400 font-semibold flex items-center gap-1">
+              <ShieldCheck className="size-3.5" />
+              SSLCommerz 100% Secured
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Hero Section with Executive Aviation Flight Deck & Bespoke Route Radar */}
+      <section className="relative px-2 pt-2 sm:px-4 md:px-6 overflow-hidden max-w-full">
+        <div className="relative mx-auto min-h-[420px] sm:h-[400px] md:h-[480px] max-w-[1600px] overflow-hidden rounded-2xl sm:rounded-3xl md:rounded-4xl bg-neutral-950 shadow-2xl border border-neutral-800/80 pb-20 sm:pb-0">
+          {/* Background Image Carousel with Luxury Lighting */}
+          {destinations.map((dest, idx) => (
+            <div
+              key={dest.code}
+              className={`absolute inset-0 transition-opacity duration-1000 ease-out ${
+                idx === activeSlide ? "opacity-100" : "opacity-0 pointer-events-none"
+              }`}
+            >
+              <img
+                src={dest.image}
+                alt={dest.city}
+                className="w-full h-full object-cover scale-105 transition-transform duration-[8000ms] ease-out brightness-[0.75]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/40 to-neutral-950/30" />
+              <div className="absolute inset-0 bg-gradient-to-r from-neutral-950/90 via-neutral-950/50 to-transparent" />
+            </div>
+          ))}
+
+          {/* Hero Content Box (Bespoke Luxury Flight Deck) */}
+          <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-center px-3 sm:px-6 md:px-8 py-6 sm:py-8">
+            <div className="max-w-2xl space-y-3 sm:space-y-4">
+              <div className="inline-flex items-center gap-2 rounded-full bg-blue-950/80 border border-blue-500/30 px-3 py-1 text-xs font-extrabold text-sky-300 backdrop-blur-md shadow-lg shadow-blue-900/30">
+                <Sparkles className="size-3.5 text-amber-400" />
+                <span className="tracking-wide uppercase text-[10px] sm:text-[11px]">MusafirX Expeditions • Sabre GDS Global</span>
+              </div>
+
+              <h1 className="text-2xl sm:text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
+                Fly Beyond Horizons with{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-blue-200 to-amber-300">
+                  Precision & Elegance
+                </span>
+              </h1>
+
+              <p className="text-xs md:text-sm text-neutral-300 max-w-xl leading-relaxed">
+                Experience next-generation air travel with direct Sabre GDS inventory, instant B2B agent ticketing, and transparent bargain fares.
+              </p>
+
+              {/* Bespoke Route Telemetry Pill */}
+              <div className="pt-1 sm:pt-2">
+                <div className="inline-flex max-w-full flex-wrap items-center gap-2 sm:gap-3 bg-neutral-900/85 backdrop-blur-xl p-2 sm:p-3 rounded-2xl border border-white/15 shadow-2xl">
+                  {/* Origin */}
+                  <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-white/10 text-white">
+                    <span className="size-2 rounded-full bg-emerald-400 animate-ping" />
+                    <span className="text-xs font-mono font-black">DAC</span>
+                    <span className="text-xs text-neutral-300 font-medium hidden sm:inline">Dhaka</span>
+                  </div>
+
+                  {/* Flight Vector */}
+                  <div className="flex items-center gap-1 text-sky-400 font-medium text-xs px-0.5">
+                    <span className="h-[1px] w-4 sm:w-10 bg-gradient-to-r from-transparent via-sky-400 to-sky-400" />
+                    <Plane className="size-3.5 sm:size-4 transform rotate-45 text-amber-400 animate-pulse" />
+                    <span className="h-[1px] w-4 sm:w-10 bg-gradient-to-r from-sky-400 via-sky-400 to-transparent" />
+                  </div>
+
+                  {/* Destination */}
+                  <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-primary text-white shadow-md shadow-primary/30">
+                    <span className="text-xs font-mono font-black">{currentDest.code}</span>
+                    <span className="text-xs font-bold">{currentDest.city}</span>
+                  </div>
+
+                  {/* Dynamic Fare Chip */}
+                  <div className="hidden md:flex items-center gap-1.5 pl-2 border-l border-white/20 text-xs">
+                    <span className="text-neutral-400 text-[10px] uppercase font-bold tracking-wider">Starting at</span>
+                    <span className="text-amber-400 font-black text-sm">{currentDest.startingFare}</span>
+                  </div>
+                </div>
+
+                {/* Quick Destination Switcher Chips */}
+                <div className="mt-2.5 flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-full py-1">
+                  <span className="text-[11px] font-bold text-neutral-400 mr-1 hidden sm:inline shrink-0">Featured:</span>
+                  {destinations.map((dest, idx) => (
+                    <button
+                      key={dest.code}
+                      type="button"
+                      onClick={() => setActiveSlide(idx)}
+                      className={`text-[11px] font-bold px-3 py-1 rounded-full transition-all duration-200 cursor-pointer shrink-0 ${
+                        idx === activeSlide
+                          ? "bg-white text-neutral-900 shadow-md font-extrabold"
+                          : "bg-white/10 hover:bg-white/20 text-neutral-300 backdrop-blur-xs"
+                      }`}
+                    >
+                      {dest.city}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Carousel Slide Indicators */}
+          <div className="absolute right-6 top-6 hidden md:flex items-center gap-2 bg-neutral-900/70 px-3.5 py-2 rounded-full backdrop-blur-md border border-white/10">
+            {destinations.map((dest, idx) => (
+              <button
+                key={dest.code}
+                type="button"
+                onClick={() => setActiveSlide(idx)}
+                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                  idx === activeSlide ? "w-7 bg-amber-400" : "w-2 bg-white/30 hover:bg-white/60"
+                }`}
+                aria-label={`Slide ${dest.city}`}
+              />
+            ))}
+          </div>
         </div>
 
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center mb-12">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 text-balance">
-              Hey, Where are going today?
-            </h2>
-            <p className="text-lg md:text-xl text-white/95 text-pretty max-w-2xl mx-auto">
-              Search and compare flights from multiple airlines. Book with confidence and travel with ease.
-            </p>
-          </div>
-
-          <div className="max-w-6xl mx-auto">
-            <FlightSearchForm variant="hero" />
-          </div>
+        {/* Floating Flight Search Form - Overlaps hero seamlessly */}
+        <div className="relative z-20 mx-auto -mt-10 sm:-mt-16 md:-mt-24 max-w-7xl px-2 sm:px-4">
+          <FlightSearchForm variant="hero" />
         </div>
       </section>
 
       {/* Recent Searches Section */}
-      <section className="py-12 bg-background border-b border-border">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <RecentSearches />
-          </div>
+      <section className="py-12 bg-white">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <RecentSearches />
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-16 md:py-24 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Why Choose MusafirX?</h3>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              We provide the best flight booking experience with competitive prices and excellent service
+      {/* Why MusafirX - Aviation Advantages & Enterprise GDS Features */}
+      <section className="py-16 md:py-20 bg-neutral-50/60 border-y border-neutral-200/60">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <div className="mb-10 md:mb-14 max-w-2xl">
+            <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-widest bg-primary/10 text-primary border border-primary/20">
+              <ShieldCheck className="size-4" />
+              Why MusafirX
+            </span>
+            <h2 className="mt-3 text-2xl md:text-4xl font-black text-neutral-900 tracking-tight leading-tight">
+              Travel Booking, <span className="text-primary">Done Right</span>
+            </h2>
+            <p className="mt-2 text-sm md:text-base text-neutral-500 leading-relaxed">
+              Experience the next generation OTA platform backed by direct Sabre GDS integration and world-class B2B agent hierarchy.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            <Card className="p-6 text-center hover:shadow-lg transition-all hover:-translate-y-1 border-2 hover:border-primary/50">
-              <div className="h-14 w-14 bg-primary rounded-lg flex items-center justify-center mx-auto mb-4">
-                <Shield className="h-7 w-7 text-white" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Feature 01 */}
+            <article className="group relative flex flex-col justify-between overflow-hidden rounded-3xl bg-white p-6 shadow-sm border border-neutral-200/80 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+              <div>
+                <div className="flex items-center justify-between">
+                  <div className="size-12 rounded-2xl bg-primary/8 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                    <CalendarClock className="size-6" />
+                  </div>
+                  <span className="font-mono text-sm font-black text-neutral-300">01</span>
+                </div>
+                <h3 className="mt-5 text-lg font-bold text-neutral-900">Book Now, Pay Later</h3>
+                <p className="mt-2 text-xs md:text-sm text-neutral-500 leading-relaxed">
+                  Lock today's lower GDS fare and complete payment before ticket time limit expiry. Decide faster without payment pressure.
+                </p>
               </div>
-              <h4 className="font-bold text-lg text-foreground mb-2">Secure Booking</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Your data is protected with industry-standard encryption
-              </p>
-            </Card>
+            </article>
 
-            <Card className="p-6 text-center hover:shadow-lg transition-all hover:-translate-y-1 border-2 hover:border-primary/50">
-              <div className="h-14 w-14 bg-accent rounded-lg flex items-center justify-center mx-auto mb-4">
-                <Clock className="h-7 w-7 text-white" />
+            {/* Feature 02 */}
+            <article className="group relative flex flex-col justify-between overflow-hidden rounded-3xl bg-white p-6 shadow-sm border border-neutral-200/80 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+              <div>
+                <div className="flex items-center justify-between">
+                  <div className="size-12 rounded-2xl bg-primary/8 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                    <Building2 className="size-6" />
+                  </div>
+                  <span className="font-mono text-sm font-black text-neutral-300">02</span>
+                </div>
+                <h3 className="mt-5 text-lg font-bold text-neutral-900">Sabre GDS Certified</h3>
+                <p className="mt-2 text-xs md:text-sm text-neutral-500 leading-relaxed">
+                  Real-time direct Bargain Finder Max flight shopping engine with instant PNR creation and Sabre sandbox testing.
+                </p>
               </div>
-              <h4 className="font-bold text-lg text-foreground mb-2">24/7 Support</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Our team is always ready to assist you with your bookings
-              </p>
-            </Card>
+            </article>
 
-            <Card className="p-6 text-center hover:shadow-lg transition-all hover:-translate-y-1 border-2 hover:border-primary/50">
-              <div className="h-14 w-14 bg-secondary rounded-lg flex items-center justify-center mx-auto mb-4">
-                <Award className="h-7 w-7 text-white" />
+            {/* Feature 03 */}
+            <article className="group relative flex flex-col justify-between overflow-hidden rounded-3xl bg-white p-6 shadow-sm border border-neutral-200/80 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+              <div>
+                <div className="flex items-center justify-between">
+                  <div className="size-12 rounded-2xl bg-primary/8 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                    <Wallet className="size-6" />
+                  </div>
+                  <span className="font-mono text-sm font-black text-neutral-300">03</span>
+                </div>
+                <h3 className="mt-5 text-lg font-bold text-neutral-900">Instant SSLCommerz Payments</h3>
+                <p className="mt-2 text-xs md:text-sm text-neutral-500 leading-relaxed">
+                  Pay smoothly using any credit/debit card, bKash, Nagad, or internet banking with 256-bit bank encryption and instant e-ticket issuance.
+                </p>
               </div>
-              <h4 className="font-bold text-lg text-foreground mb-2">Best Prices</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Compare prices from multiple airlines to find the best deals
-              </p>
-            </Card>
+            </article>
 
-            <Card className="p-6 text-center hover:shadow-lg transition-all hover:-translate-y-1 border-2 hover:border-primary/50">
-              <div className="h-14 w-14 bg-primary rounded-lg flex items-center justify-center mx-auto mb-4">
-                <Plane className="h-7 w-7 text-white" />
+            {/* Feature 04 */}
+            <article className="group relative flex flex-col justify-between overflow-hidden rounded-3xl bg-white p-6 shadow-sm border border-neutral-200/80 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+              <div>
+                <div className="flex items-center justify-between">
+                  <div className="size-12 rounded-2xl bg-primary/8 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                    <Headphones className="size-6" />
+                  </div>
+                  <span className="font-mono text-sm font-black text-neutral-300">04</span>
+                </div>
+                <h3 className="mt-5 text-lg font-bold text-neutral-900">24/7 Ticketing Desk</h3>
+                <p className="mt-2 text-xs md:text-sm text-neutral-500 leading-relaxed">
+                  Round-the-clock live flight reissuance, cancellation, voiding, and passenger itinerary assistance.
+                </p>
               </div>
-              <h4 className="font-bold text-lg text-foreground mb-2">Easy Booking</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Simple and intuitive interface for hassle-free bookings
-              </p>
-            </Card>
+            </article>
           </div>
         </div>
       </section>
 
-      {/* Popular Destinations */}
-      <section className="py-16 md:py-24 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Popular Destinations</h3>
-            <p className="text-lg text-muted-foreground">Explore the most sought-after travel destinations</p>
+      {/* Popular Trending Flight Deals with Live Fares */}
+      <section className="py-16 md:py-20 bg-white">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-widest text-primary">
+                Popular Routes
+              </span>
+              <h3 className="text-2xl md:text-4xl font-black text-neutral-900 tracking-tight mt-1">
+                Trending Destinations
+              </h3>
+            </div>
+            <Link
+              href="/flight/search"
+              className="text-xs md:text-sm font-bold text-primary hover:underline flex items-center gap-1"
+            >
+              <span>View all flight routes</span>
+              <ArrowRight className="size-4" />
+            </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {[
-              {
-                city: "Dubai",
-                country: "UAE",
-                image: "/images/dubai.jpg",
-              },
-              {
-                city: "Singapore",
-                country: "Singapore",
-                image: "/images/singapore.jpg",
-              },
-              {
-                city: "Bangkok",
-                country: "Thailand",
-                image: "images/bangkok.jpg",
-              },
-            ].map((destination) => (
-              <Card
-                key={destination.city}
-                className="overflow-hidden group cursor-pointer hover:shadow-xl transition-all hover:-translate-y-2"
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {destinations.slice(0, 3).map((item) => (
+              <div
+                key={item.code}
+                onClick={() => router.push("/flight/search")}
+                className="group relative overflow-hidden rounded-3xl cursor-pointer shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5"
               >
-                <div className="relative h-64 overflow-hidden">
+                <div className="h-80 w-full relative overflow-hidden">
                   <img
-                    src={destination.image}
-                    alt={destination.city}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    src={item.image}
+                    alt={item.city}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 to-transparent" />
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                    <h4 className="text-3xl font-bold mb-2">{destination.city}</h4>
-                    <p className="text-lg">{destination.country}</p>
+                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/90 via-neutral-950/30 to-transparent" />
+
+                  {/* Card Content */}
+                  <div className="absolute inset-0 p-6 flex flex-col justify-between text-white">
+                    <div className="flex justify-between items-start">
+                      <span className="font-mono text-sm font-black bg-white/20 backdrop-blur-md px-3 py-1 rounded-full">
+                        DAC → {item.code}
+                      </span>
+                      <span className="text-xs bg-primary font-bold px-3 py-1 rounded-full shadow-md">
+                        Live Fares
+                      </span>
+                    </div>
+
+                    <div>
+                      <span className="text-xs text-neutral-300 font-medium">
+                        {item.country}
+                      </span>
+                      <h4 className="text-2xl font-black tracking-tight">{item.city}</h4>
+                      <p className="text-xs text-neutral-400 mt-1">{item.tagline}</p>
+
+                      <div className="mt-4 pt-3 border-t border-white/20 flex items-center justify-between">
+                        <div>
+                          <span className="text-[10px] text-neutral-400 uppercase tracking-wider block">
+                            Fares starting at
+                          </span>
+                          <span className="text-xl font-black text-white">
+                            {item.startingFare}
+                          </span>
+                        </div>
+                        <span className="size-9 rounded-full bg-white text-neutral-900 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
+                          <ArrowRight className="size-4" />
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </Card> 
+              </div>
             ))}
           </div>
         </div>

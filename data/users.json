@@ -1,0 +1,13 @@
+[
+  {
+    "id": "usr-super-admin-01",
+    "email": "admin@musafirx.com",
+    "name": "MusafirX Super Admin",
+    "role": "super_admin",
+    "passwordHash": "f10b42e58a4e609bbfb6f4e8f13bc67b995a5b791c6ea9f9ef8ebeceb7dc6d9962cee8c914cf3d878f080af8f08e7cf469fdb3099f478c796304696b1c53048d",
+    "salt": "ddfa359e26aaf41d82f63c2c807c954f",
+    "status": "active",
+    "createdAt": "2026-10-30T20:23:39.359Z",
+    "lastLogin": "2026-10-30T20:25:08.110Z"
+  }
+]

@@ -7,80 +7,125 @@ import { Button } from "@/components/ui/button"
 import type { PassengerCount } from "@/lib/store"
 
 interface PassengerSelectorProps {
-  label: string
-  value: PassengerCount
+  label?: string
+  passengers?: PassengerCount
+  value?: PassengerCount
   onChange: (passengers: PassengerCount) => void
 }
 
-export function PassengerSelector({ label, value, onChange }: PassengerSelectorProps) {
+export function PassengerSelector({
+  label = "Travellers",
+  passengers,
+  value,
+  onChange,
+}: PassengerSelectorProps) {
   const [isOpen, setIsOpen] = useState(false)
   const wrapperRef = useRef<HTMLDivElement>(null)
 
+  const currentPassengers: PassengerCount = passengers || value || {
+    adults: 1,
+    children: 0,
+    infants: 0,
+  }
+
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
+    function handleClickOutside(event: MouseEvent | TouchEvent) {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
         setIsOpen(false)
       }
     }
     document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
+    document.addEventListener("touchstart", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("touchstart", handleClickOutside)
+    }
   }, [])
 
-  const totalPassengers = value.adults + value.children + value.infants
+  const totalPassengers =
+    currentPassengers.adults + currentPassengers.children + currentPassengers.infants
 
   const updateCount = (type: keyof PassengerCount, delta: number) => {
-    const newValue = Math.max(0, value[type] + delta)
-    if (type === "adults" && newValue === 0 && (value.children > 0 || value.infants > 0)) {
-      return // At least one adult required if there are children or infants
+    const newValue = Math.max(0, currentPassengers[type] + delta)
+    if (
+      type === "adults" &&
+      newValue === 0 &&
+      (currentPassengers.children > 0 || currentPassengers.infants > 0)
+    ) {
+      return
     }
-    onChange({ ...value, [type]: newValue })
+    onChange({ ...currentPassengers, [type]: newValue })
   }
 
   return (
     <div ref={wrapperRef} className="relative">
-      <Label htmlFor={label} className="text-sm font-medium text-foreground mb-2 block">
+      <Label className="text-xs font-bold text-neutral-500 mb-1.5 block tracking-wider uppercase">
         {label}
       </Label>
+
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center gap-3 px-4 py-2.5 bg-background border border-input rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors text-left"
+        className="w-full flex items-center justify-between p-3.5 rounded-2xl bg-neutral-50 hover:bg-neutral-100/80 border border-neutral-200 transition-all text-left"
       >
-        <Users className="h-4 w-4 text-muted-foreground" />
-        <span className="text-sm">
-          {totalPassengers} {totalPassengers === 1 ? "Passenger" : "Passengers"}
-        </span>
+        <div className="flex items-center gap-3">
+          <div className="size-8 rounded-xl bg-primary/8 text-primary flex items-center justify-center shrink-0">
+            <Users className="size-4" />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-sm font-bold text-neutral-900 leading-tight">
+              {totalPassengers} {totalPassengers === 1 ? "Traveller" : "Travellers"}
+            </span>
+            <span className="text-xs text-neutral-400">Economy</span>
+          </div>
+        </div>
       </button>
 
       {isOpen && (
-        <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg p-4">
-          <div className="space-y-4">
+        <div className="absolute z-50 right-0 max-w-[calc(100vw-2rem)] w-72 mt-2 bg-white border border-neutral-200 rounded-2xl shadow-2xl p-4 divide-y divide-neutral-100 animate-in fade-in slide-in-from-top-2 duration-150">
+          <div className="pb-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-neutral-400">
+              Select Passengers
+            </span>
+          </div>
+
+          <div className="py-3 space-y-4">
             <PassengerRow
               label="Adults"
               description="12+ years"
-              count={value.adults}
+              count={currentPassengers.adults}
               onIncrement={() => updateCount("adults", 1)}
               onDecrement={() => updateCount("adults", -1)}
-              minCount={value.children > 0 || value.infants > 0 ? 1 : 0}
+              minCount={
+                currentPassengers.children > 0 || currentPassengers.infants > 0 ? 1 : 1
+              }
             />
             <PassengerRow
               label="Children"
               description="2-11 years"
-              count={value.children}
+              count={currentPassengers.children}
               onIncrement={() => updateCount("children", 1)}
               onDecrement={() => updateCount("children", -1)}
             />
             <PassengerRow
               label="Infants"
               description="Under 2 years"
-              count={value.infants}
+              count={currentPassengers.infants}
               onIncrement={() => updateCount("infants", 1)}
               onDecrement={() => updateCount("infants", -1)}
             />
           </div>
-          <Button type="button" onClick={() => setIsOpen(false)} className="w-full mt-4" size="sm">
-            Done
-          </Button>
+
+          <div className="pt-3">
+            <Button
+              type="button"
+              onClick={() => setIsOpen(false)}
+              className="w-full bg-primary hover:bg-secondary text-white font-bold rounded-xl py-2"
+              size="sm"
+            >
+              Done
+            </Button>
+          </div>
         </div>
       )}
     </div>
@@ -105,31 +150,27 @@ function PassengerRow({
   return (
     <div className="flex items-center justify-between">
       <div>
-        <div className="text-sm font-medium text-foreground">{label}</div>
-        <div className="text-xs text-muted-foreground">{description}</div>
+        <div className="text-sm font-bold text-neutral-900 leading-tight">{label}</div>
+        <div className="text-[11px] text-neutral-400">{description}</div>
       </div>
-      <div className="flex items-center gap-3">
-        <Button
+      <div className="flex items-center gap-2">
+        <button
           type="button"
-          variant="outline"
-          size="icon"
-          className="h-8 w-8 bg-transparent"
           onClick={onDecrement}
           disabled={count <= minCount}
+          className="size-7 rounded-lg border border-neutral-200 flex items-center justify-center text-neutral-600 hover:border-primary hover:text-primary disabled:opacity-40 disabled:hover:border-neutral-200"
         >
-          <Minus className="h-3 w-3" />
-        </Button>
-        <span className="text-sm font-medium w-6 text-center">{count}</span>
-        <Button
+          <Minus className="size-3" />
+        </button>
+        <span className="text-sm font-bold w-6 text-center text-neutral-900">{count}</span>
+        <button
           type="button"
-          variant="outline"
-          size="icon"
-          className="h-8 w-8 bg-transparent"
           onClick={onIncrement}
           disabled={count >= 9}
+          className="size-7 rounded-lg border border-neutral-200 flex items-center justify-center text-neutral-600 hover:border-primary hover:text-primary disabled:opacity-40"
         >
-          <Plus className="h-3 w-3" />
-        </Button>
+          <Plus className="size-3" />
+        </button>
       </div>
     </div>
   )

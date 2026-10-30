@@ -22,23 +22,34 @@ export interface FlightSearchData {
   passengers: PassengerCount
 }
 
+import type { FlightOffer } from "./sabre/types"
+
 export interface Flight {
   id: string
   airline: string
+  airlineCode?: string
   flightNumber: string
   origin: Airport
   destination: Airport
   departureTime: string
+  departureDate?: string
   arrivalTime: string
+  arrivalDate?: string
   duration: string
   price: number
   stops: number
   aircraft: string
+  baggage?: string
+  refundableType?: string
+  seatsAvailable?: number
+  bookingClass?: string
+  source?: "sabre" | "musafirx_gds"
 }
 
 interface AppState {
   searchData: FlightSearchData
-  searchResults: Flight[]
+  searchResults: FlightOffer[]
+  selectedFlight: FlightOffer | null
 }
 
 export const FlightStore = new Store<AppState>({
@@ -55,4 +66,5 @@ export const FlightStore = new Store<AppState>({
     },
   },
   searchResults: [],
+  selectedFlight: null,
 })
